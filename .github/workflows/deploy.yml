@@ -20,7 +20,7 @@ jobs:
       - name: Run backend tests
         run: |
           docker run --rm \
-            --env-file /home/secrets/tg-ai-agent.env \
+            --env-file /home/actionsrunner/secrets/tg-ai-agent.env \
             -e PYTHONPATH=/app \
             -v ${{ github.workspace }}/backend/tests:/app/tests \
             tg-ai-backend-test \
