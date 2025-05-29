@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: ai_backend
     env_file:
-      - .env
+      - /home/secrets/tg-ai-agent.env
     ports:
       - "8085:8000"
     restart: always
@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
     container_name: telegram_bot
     env_file:
-      - .env
+      - /home/secrets/tg-ai-agent.env
     depends_on:
       - backend
     restart: always
