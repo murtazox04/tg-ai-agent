@@ -1,0 +1,39 @@
+name: Telegram AI Agent CI/CD (Self-hosted + Docker Compose)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build backend test image
+        run: |
+          docker build -t tg-ai-backend-test ./backend
+
+      - name: Run backend tests
+        run: |
+          docker run --rm \
+            --env-file .env \
+            -e PYTHONPATH=/app \
+            -v ${{ github.workspace }}/backend/tests:/app/tests \
+            tg-ai-backend-test \
+            pytest tests/
+
+      - name: Stop and remove containers
+        run: |
+          docker-compose down || true
+
+      - name: Build and start containers
+        run: |
+          docker-compose up -d --build
+
+      - name: Cleanup
+        run: |
+          docker image prune -f
